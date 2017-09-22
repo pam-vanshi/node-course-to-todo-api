@@ -5,7 +5,7 @@ const {ObjectID} = require('mongodb')
 var {mongoose} = require('./db/mongoos.js');
 var {Todo} = require('./modles/todo.js')
 var {User} = require('./modles/User.js')
-
+const port = process.env.PORT || 3000;
 var app = express();
 
 app.use(bodyParser.json())
@@ -75,6 +75,6 @@ module.exports = {
 
 
 
-app.listen(3000, () => {
-  console.log("starting on port 3000");
+app.listen(port, () => {
+  console.log("starting on port" + port);
 })
