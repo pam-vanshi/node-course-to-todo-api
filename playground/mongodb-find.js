@@ -21,7 +21,7 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
  // }, (err) => {
  //   console.log("Unable to print the data",err);
  // })
- db.collection('User').find({age:22}).toArray().then((docs1) => {
+ db.collection('User').find({age:21}).toArray().then((docs1) => {
    console.log('Users');
    console.log(docs1);
  }, (err) => { console.log(err);})
