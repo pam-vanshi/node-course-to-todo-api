@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const express = require('express')
 const bodyParser = require('body-parser')
 const {ObjectID} = require('mongodb')
@@ -62,6 +63,45 @@ app.delete('/todos/:id', (req, res) => {
   })
 })
 
+app.patch('/user/:id', (req,res) => {
+  var id = req.params.id;
+  var body = _.pick('req.body', ['text','completed'])
+  if(!ObjectID.isValid(id)){
+    return res.status(400).send("Id is not valid")
+  }
+  if(_.isBoolean(body.completed) & body.completed){
+    body.completedAt = new Date().getTime()
+  }
+  else{
+    body.completed = false,
+    body.completedAt = null
+  }
+  Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) => {
+    if(!todo){res.send('there is no todo')}
+    res.send(todo)
+  }, (err) => {
+    res.status(400).send()
+  })
+
+})
+
+
+app.post('/user', (req,res) => {
+  var body = _.pick(req.body, ['name','email','password'])
+  var user = new User({
+    name: body.name,
+    email: body.email,
+    password: body.password
+
+  })
+  user.save().then((user) => {
+     return user.generateAuthToken();
+  }).then((token) => {
+    res.header('x-auth',token).send(user)
+  }).catch((e) => {
+    res.status(400).send(e)
+  })
+})
 
 
 
