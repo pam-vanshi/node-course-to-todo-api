@@ -104,6 +104,36 @@ app.post('/user', (req,res) => {
   })
 })
 
+// app.post('/user/login', (req,res) => {
+//   var body = _.pick(req.body,['email','password'])
+//   User.findByCredentials(body.email,body.password).then((user) => {
+//     return user.generateAuthToken();
+//         }).then((token) => {
+//    res.header('x-auth',token).send(user)}).catch((e) => {
+//     res.status(400).send(e)
+//   })
+app.post('/user/login', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password']);
+
+  User.findByCredentials(body.email, body.password).then((user) => {
+    return user.generateAuthToken().then((token) => {
+      res.header('x-auth', token).send(user);
+    });
+  }).catch((e) => {
+    res.status(400).send();
+  });
+});
+
+  // User.findOne({'email': body.email,'_id': body._id}).then((user) => {
+  //   bcrypt.compare(body.password,user.password,(err, res) => {
+  //     res.send(user)
+  //   })
+  // }).catch((e) => {
+  //   res.status(400).send(e);
+  // })
+
+//})
+
 //app.get('/user/me', (req,res) => {
  //  // User.find().then((users) => {
  //  //   res.send({users})
