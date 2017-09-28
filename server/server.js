@@ -2,6 +2,7 @@ const _ = require('lodash')
 const express = require('express')
 const bodyParser = require('body-parser')
 const {ObjectID} = require('mongodb')
+var {authenticate} = require('./middleware/authenticate');
 
 var {mongoose} = require('./db/mongoos.js');
 var {Todo} = require('./modles/todo.js')
@@ -103,8 +104,22 @@ app.post('/user', (req,res) => {
   })
 })
 
-
-
+//app.get('/user/me', (req,res) => {
+ //  // User.find().then((users) => {
+ //  //   res.send({users})
+ //  // })
+ //  var token = req.header('x-auth')
+ //  User.findByToken(token).then((user) => {
+ //    if(!user){
+ //      return Promise.reject()}
+ //    res.send(user)
+ //  }).catch((e) => {
+ //    res.status(400).send();
+ //  })
+ // })
+ app.get('/user/me', authenticate, (req, res) => {
+   res.send(req.user);
+ });
 
 
 
